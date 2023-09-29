@@ -1,0 +1,1 @@
+# Piredda.Riccardo.4i.rubricaWPF
