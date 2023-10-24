@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Piredda.Riccardo._4i.rubricaWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Rubrica" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen" Loaded="Window_Loaded"
+        >
     <Grid>
-
+        <DataGrid x:Name="gdDati">
+            
+        </DataGrid>
     </Grid>
 </Window>
