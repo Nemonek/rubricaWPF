@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterScreen" Loaded="Window_Loaded"
         >
     <Grid>
-        <DataGrid x:Name="gdDati">
+        <DataGrid x:Name="gdDati" LoadingRow="gdDati_LoadingRow">
             
         </DataGrid>
     </Grid>
