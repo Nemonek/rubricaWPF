@@ -12,31 +12,40 @@ namespace Piredda.Riccardo._4i.rubricaWPF
         // for privates member use the underscore before the name;
         // for the property use the first letter lower case.
         //private string _nome;
+        private int _PK;
         private string _cognome;
         private string _telefono;
         private string _Email;
-        private int _numero;
 
         public Contatto() { }
 
         // Il costruttore è meglio che passi anche lui dal getter e dal setter, per evitare che assegni direttamente un valore non consono.
-        public Contatto(string nom, string cog, int num, string e, string Tel)
-        {
-            Nome = nom;
-            Cognome = cog;
-            Numero = num;
-            Email = e;
-            Telefono = Tel;
-        }
+        //public Contatto(string nom, string cog, int num, string e, string Tel)
+        //{
+        //    Nome = nom;
+        //    Cognome = cog;
+        //    Numero = num;
+        //    Email = e;
+        //    Telefono = Tel;
+        //}
 
         public Contatto(string r)
         {
             string[] values = r.Split(';');
-            this.Nome = values[0];
-            this.Cognome = values[1];
-            this.Telefono = values[2];
-            this.Email = values[3];
-            this.Numero = int.Parse(values[4]);
+            if(values.Length >= 5) {
+                if(int.TryParse(values[0], out int res)) {
+                    this._PK = res;
+                    this.Nome = values[1];
+                    this.Cognome = values[2];
+                    this.Telefono = values[3];
+                    this.Email = values[4];
+                }
+                else
+                {
+                    //throw new ArgumentException($"L'argomento passato al costruttore ({values[0]}) per il campo intero PK non è un numero valido.");
+                    this._PK = 0;
+                }
+            }
         }
 
         /*
@@ -100,22 +109,11 @@ namespace Piredda.Riccardo._4i.rubricaWPF
 
         */
 
+        public int PK { get => this._PK; }
         public string Nome { set; get; }
         public string Cognome { 
             get => _cognome; 
             set => _cognome = value; 
-        }
-        public int Numero { 
-            get
-            {
-                return _numero;
-            } 
-            set
-            {
-                if ( value < 0 || value > 100 )
-                    throw new ArgumentOutOfRangeException();
-                _numero = value;
-            } 
         }
 
         public string Email { get => _Email; set => _Email = value; }

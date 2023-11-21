@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media;
 
@@ -15,18 +16,17 @@ namespace Piredda.Riccardo._4i.rubricaWPF
             InitializeComponent();
             // Tutta la roba va inserita all'interno dell'evento Loaded della MainWindow.
         }
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
 
-
-            
+            const int MAX = 100;
+            int idx = 0;
             // Siccome l'apertura di un file può causare un eccezione per diversi motivi
             try
             {
 
-                const int MAX = 100;
+                
 
                 Contatto[] Contatti = new Contatto[MAX];
 
@@ -39,24 +39,23 @@ namespace Piredda.Riccardo._4i.rubricaWPF
                 // Se volessimo ovviare a questo prpblemi basterebbe riempire tutta la lunghezza dell'array di contatti vuoti, senza nome cognome ecc..
                 
 
-                int idx = 0;
+                
 
                 // Per leggere tutte le righe singolarmente possiamo ciclare con un while ogni riga una per una usando l'attributo endofstream, che definisce se siamo alla fine della stream o meno:
                 // va negato perchè di default, se non siamo già alla fine della stream, il valore sarà false, e per ciclare deve essere true.
                 // Quando poi arriveremmo alla fine endofstream passerà a true interrompendo il ciclo while.
 
-                // Nel caso in cui abbiamo 3 righe vuote, poi la 4 ha qualcosa, le righe vuote prima di quella piena saranno considerate righe, tutto quello sotto, se sono righe vuote verrà ignorato.7
+                // Nel caso in cui abbiamo 3 righe vuote, poi la 4 ha qualcosa, le righe vuote prima di quella piena saranno considerate righe, tutto quello sotto, se sono righe vuote verrà ignorato.
                 while (!sr.EndOfStream && idx < MAX)
                 {
                     riga = sr.ReadLine();
-
-                    Contatti[idx++] = new(riga);
+                    Contatti[idx] = new(riga);
+                    //Contatti[idx].Numero = idx+1;
+                    idx++;
                 }
 
                 while(idx < MAX)
-                {
                     Contatti[idx++] = new();
-                }
 
                 idx = 0;
 
@@ -68,7 +67,7 @@ namespace Piredda.Riccardo._4i.rubricaWPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"{ex.Message}\nErrore alla riga: {idx}!");
             }
 
 
@@ -130,12 +129,11 @@ namespace Piredda.Riccardo._4i.rubricaWPF
 
         private void gdDati_LoadingRow(object sender, System.Windows.Controls.DataGridRowEventArgs e)
         {
-            Contatto prova = e.Row.DataContext as Contatto;
+            Contatto prova = e.Row.Item as Contatto;
 
-            if(prova != null && prova.Nome != null)
+            if(prova != null && prova.PK == 0)
             {
-                string tmp = prova.Nome.Trim().ToLower();
-                e.Row.Background = (tmp[0] == 'm') ? Brushes.Yellow : Brushes.Transparent;
+                e.Row.Background = Brushes.Yellow;
             } 
         }
     }
