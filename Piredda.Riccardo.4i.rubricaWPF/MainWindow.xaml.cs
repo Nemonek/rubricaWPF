@@ -25,9 +25,6 @@ namespace Piredda.Riccardo._4i.rubricaWPF
             // Siccome l'apertura di un file può causare un eccezione per diversi motivi
             try
             {
-
-                
-
                 Contatto[] Contatti = new Contatto[MAX];
 
                 // Per farlo copiare sempre nella cartella in cui il programma va a cercare si aprono le proprietà del file: tasto destro -> proprietà, poi su copia si mette 'copia sempre'

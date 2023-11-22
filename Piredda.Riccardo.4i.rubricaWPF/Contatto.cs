@@ -49,7 +49,7 @@ namespace Piredda.Riccardo._4i.rubricaWPF
         }
 
         /*
-         * 04/10/2023
+         * 04/10/2023Piredda.Riccardo.4i.rubricaWPF/MainWindow.xaml
          * La differenza tra le due property scritte così, a livello di compilazione, non cambia nulla, l'assembly generato è uguale.
          * Quella di default è la seconda versione.
          * visibilità tipo nome aperta get set chiusa => struttura della property.
