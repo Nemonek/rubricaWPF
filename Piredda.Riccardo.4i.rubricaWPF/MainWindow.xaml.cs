@@ -70,65 +70,16 @@ namespace Piredda.Riccardo._4i.rubricaWPF
 
             //// Con la lista viene visuallizata nella datagrid una riga in più poichè consente di aggiungere manualmente elementi senza implementare il codice, ma è già implementato.         
             ////List<Contatto> Contatti = new();
-            //Contatto c = new();
-
-            //// Chiamate ai setter
-            //c.Nome = "Riccardo";
-            //c.Cognome = "Piredda";
-            //c.Numero = 1;
-            //c.Email = "Riccardo@gmail.com";
-            //c.Telefono = "3516856899";
-
-            //try
-            //{
-            //    c.Numero = 101;
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message);
-            //}
-            //Contatti[0] = c;
-            ////Contatti.Add(c);
-
-            //// Costruttore implicito: non è neccessario avere un costruttore che supporta parametri per fare questo
-            //Contatto c1 = new()
-            //{
-            //    Nome = "Riccardo",
-            //    Cognome = "Piredda",
-            //    Numero = 2,
-            //    Email = "Riccardo@gmail.com",
-            //    Telefono = "356856897"
-            //};
-
-            //Contatti[1] = c1;
-            ////Contatti.Add(c1);
-
-            //// Ulteriore uso della target typed new expression.
-            //Contatti[2] = new()
-            //{
-            //    Nome = "Roberto",
-            //    Cognome = "Bianchi",
-            //    Numero = 3,
-            //    Email = "Riccardo@gmail.com",
-            //    Telefono = "3515879970222"
-            //};
-
-            ////Contatti.Add( new() {
-            ////    Nome = "Roberto",
-            ////    Cognome = "Bianchi",
-            ////    Numero = 3
-            ////});
-
 
             // In C# il valore di default alla creazione di un intero è 0, che viene assegnato automaticamente.
-            int valore;
+            //int valore;
         }
 
         private void gdDati_LoadingRow(object sender, System.Windows.Controls.DataGridRowEventArgs e)
         {
             Contatto prova = e.Row.Item as Contatto;
 
-            if(prova != null && prova.PK == 0)
+            if(prova != null && (prova.PK == 0 || prova.Telefono[0] == '3'))
             {
                 e.Row.Background = Brushes.Yellow;
             } 

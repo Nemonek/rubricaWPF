@@ -100,13 +100,6 @@ namespace Piredda.Riccardo._4i.rubricaWPF
          * 
          * NOTA BENE: si possono creeare property di sola lattura così:
             public Nome { private set; get; }
-         *
-         *
-         *
-         *
-         *
-         *
-
         */
 
         public int PK { get => this._PK; }
