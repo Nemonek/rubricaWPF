@@ -102,6 +102,29 @@ while(idx < MAX)
     Contatti[idx++] = new();
 ```
 Nel caso in cui venga sollevata una qualsiasi eccezione dall'apertura del file o dall'elaborazione dei dati in esso contenuti l'eccezione verrà gestita e verrà mostrato all'utente una finestra con il messaggio dell'eccezione e quale riga del file CSV l'ha causata. 
+## Colorazione dei contatti
+Ogni riga della dataGrid (vedi XAML) è collegata ad un evento che viene chiamato al caricamento della stessa:
+```C#
+private void gdDati_LoadingRow(object sender, System.Windows.Controls.DataGridRowEventArgs e)
+```
+Una volta chiamato l'evento il suo 
+Una volta chiamato l'evento viene assegnato ad una variabile il contenuto della riga appena caricata e viene fatto un controllo preliminare sul contenuto: se è null, si procede a controllare il contenuto, se no non si fa nulla (Nota bene: se il contenuto della riga fosse null verrebbe tirata su un eccezione in fase di runtime).
+```C#
+Contatto prova = e.Row.Item as Contatto;
+if(prova != null)
+```
+Una volta accertato che in 'prova' ci sia un oggetto si controlla se la prima cifra del numero di telefono del contatto è 3, e si colora il background di giallo.
+```C#
+if(prova.Telefono != null && prova.Telefono[0] == '3')
+    e.Row.Background = Brushes.Yellow;
+```
+Altrimenti si controlla se la primary key è uguale a 0, e nel caso si colora di rosso.
+```C#
+else if(prova.PK == 0)
+    e.Row.Background = Brushes.Red;
+```
+Se nessuna di queste condizioni si verifica il background della riga rimane del colore di default di windows.
+
 ## Accortezze in fase di compilazione
 1) Per non dover copiare a mano il file CSV nella directory di output del file eseguibile inserire nel file NomeProgetto.csproj le seguenti righe di codice:
     ```XML
