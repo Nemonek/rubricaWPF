@@ -79,10 +79,15 @@ namespace Piredda.Riccardo._4i.rubricaWPF
         {
             Contatto prova = e.Row.Item as Contatto;
 
-            if(prova != null && (prova.PK == 0 || prova.Telefono[0] == '3'))
+            if(prova != null)
             {
-                e.Row.Background = Brushes.Yellow;
-            } 
+                if(prova.Telefono != null && prova.Telefono[0] == '3')
+                    e.Row.Background = Brushes.Yellow;
+                else if(prova.PK == 0)
+                    e.Row.Background = Brushes.Red;
+
+            }
+
         }
     }
 }
