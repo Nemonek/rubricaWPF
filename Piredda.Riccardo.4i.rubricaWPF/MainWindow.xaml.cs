@@ -81,7 +81,7 @@ namespace Piredda.Riccardo._4i.rubricaWPF
 
             if(prova != null)
             {
-                if(prova.Telefono[0] == '3')
+                if(prova.Telefono != null && prova.Telefono[0] == '3')
                     e.Row.Background = Brushes.Yellow;
                 else if(prova.PK == 0)
                     e.Row.Background = Brushes.Red;
