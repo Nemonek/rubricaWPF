@@ -9,8 +9,21 @@
         WindowStartupLocation="CenterScreen" Loaded="Window_Loaded"
         >
     <Grid>
-        <DataGrid x:Name="gdDati" LoadingRow="gdDati_LoadingRow">
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="15"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <DataGrid Grid.Column="0" x:Name="GrigliaContatti" SelectionChanged="GrigliaContatti_SelectionChanged">
             
         </DataGrid>
+        <DataGrid x:Name="GrigliaPersone" Grid.Column="1" SelectionChanged="GrigliaPersone_SelectionChanged">
+            
+        </DataGrid>
+
+        <TextBlock x:Name="StatusBar" Grid.Row="1"></TextBlock>
     </Grid>
 </Window>

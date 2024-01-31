@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media;
+using System.Collections.Generic;
+using System.Linq;
+using System.ComponentModel;
 
 namespace Piredda.Riccardo._4i.rubricaWPF
 {
@@ -11,83 +14,74 @@ namespace Piredda.Riccardo._4i.rubricaWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        private List<Contatto> _tutteLeInformazioni;
+        private List<Contatto> _itemSourceContatti;
+        private List<Persona> _itemSourcePersone;
+
+
+        public List<Contatto> ItemSourceContatti { get => this._itemSourceContatti; }
+        public List<Persona> ItemSourcePersone { get => this._itemSourcePersone; }
+
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = this;
             // Tutta la roba va inserita all'interno dell'evento Loaded della MainWindow.
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
-
-            const int MAX = 100;
-            int idx = 0;
+            this._itemSourceContatti = new();
+            this._tutteLeInformazioni = new();
+            this._itemSourcePersone = new();
             // Siccome l'apertura di un file può causare un eccezione per diversi motivi
             try
             {
-                Contatto[] Contatti = new Contatto[MAX];
-
-                // Per farlo copiare sempre nella cartella in cui il programma va a cercare si aprono le proprietà del file: tasto destro -> proprietà, poi su copia si mette 'copia sempre'
-                StreamReader sr = new("Dati.csv");
-                sr.ReadLine();
-                string riga = string.Empty; // equivalente di ""
-
-                // Non avendo 100 elementi inizializzati, ma messi a null, il binding cercava di visualizzzre oggetti null, e sollevava un exception; mettento 3, ed inizializzando 3, non ci sono problemi
-                // Se volessimo ovviare a questo prpblemi basterebbe riempire tutta la lunghezza dell'array di contatti vuoti, senza nome cognome ecc..
-                
-
-                
-
-                // Per leggere tutte le righe singolarmente possiamo ciclare con un while ogni riga una per una usando l'attributo endofstream, che definisce se siamo alla fine della stream o meno:
-                // va negato perchè di default, se non siamo già alla fine della stream, il valore sarà false, e per ciclare deve essere true.
-                // Quando poi arriveremmo alla fine endofstream passerà a true interrompendo il ciclo while.
-
-                // Nel caso in cui abbiamo 3 righe vuote, poi la 4 ha qualcosa, le righe vuote prima di quella piena saranno considerate righe, tutto quello sotto, se sono righe vuote verrà ignorato.
-                while (!sr.EndOfStream && idx < MAX)
+                using ( StreamReader sr = new( "Contatti.csv" ) )
                 {
-                    riga = sr.ReadLine();
-                    Contatti[idx] = new(riga);
-                    //Contatti[idx].Numero = idx+1;
-                    idx++;
+                    sr.ReadLine();
+                    string riga = string.Empty;
+                
+                    while (!sr.EndOfStream)
+                        this._tutteLeInformazioni.Add(new Contatto(sr.ReadLine()));
+
+                    sr.Close();
                 }
+                StatusBar.Text = $"Trovati {this._tutteLeInformazioni.Count} contatti";
 
-                while(idx < MAX)
-                    Contatti[idx++] = new();
+                using ( StreamReader sr = new( "Persone.csv" ) )
+                {
+                    sr.ReadLine();
+                    string riga = string.Empty;
 
-                idx = 0;
+                    while (!sr.EndOfStream)
+                        this._itemSourcePersone.Add(new Persona(sr.ReadLine()));
 
-                gdDati.ItemsSource = Contatti;
+                    sr.Close();
+                }
+                StatusBar.Text = $"Trovati {StatusBar.Text} contatti e {this._itemSourcePersone.Count} persone";
 
-
-
-                //riga = sr.ReadLine();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{ex.Message}\nErrore alla riga: {idx}!");
+                MessageBox.Show($"{ex.Message}");
             }
 
-
-            //// Con la lista viene visuallizata nella datagrid una riga in più poichè consente di aggiungere manualmente elementi senza implementare il codice, ma è già implementato.         
-            ////List<Contatto> Contatti = new();
-
-            // In C# il valore di default alla creazione di un intero è 0, che viene assegnato automaticamente.
-            //int valore;
+            GrigliaContatti.ItemsSource = this.ItemSourceContatti;
+            GrigliaPersone.ItemsSource = this.ItemSourcePersone;
         }
 
-        private void gdDati_LoadingRow(object sender, System.Windows.Controls.DataGridRowEventArgs e)
+        private void GrigliaContatti_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            Contatto prova = e.Row.Item as Contatto;
+            //StatusBar.Text = $"Contatto selezionato: {((Contatto)e.AddedItems[0]).Nome}";
+        }
+        private void GrigliaPersone_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            this._itemSourceContatti.Clear();
+            Persona p = e.AddedItems[0] as Persona;
+            this._itemSourceContatti = new List<Contatto>(this._tutteLeInformazioni.Where(t => t.PK == p.PK));
 
-            if(prova != null)
-            {
-                if(prova.Telefono != null && prova.Telefono[0] == '3')
-                    e.Row.Background = Brushes.Yellow;
-                else if(prova.PK == 0)
-                    e.Row.Background = Brushes.Red;
-
-            }
-
+            GrigliaContatti.ItemsSource = this.ItemSourceContatti;
         }
     }
 }
